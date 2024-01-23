@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String @id @default(uuid())
+  email    String @unique
+  username String
+
+  hashedRt String?
+  hash     String?
+  salt     String?
+
+  avatar String?
+
+  isProvider Boolean    @default(false)
+  isVerified Boolean    @default(false)
+  Document   Document[]
+}
+
+model Document {
+  id String @id @default(uuid())
+
+  title      String
+  content    String?
+  coverImage String?
+  icon       String?
+
+  parentId  String?
+  parent    Document?  @relation("ParentDocument", fields: [parentId], references: [id])
+  childrens Document[] @relation("ParentDocument")
+
+  isPublished Boolean @default(false)
+  isArchived  Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User?  @relation(fields: [userId], references: [id])
+
+  @@index(fields: [userId], map: "by_user")
+  @@index(fields: [userId, parentId], map: "by_user_parent")
+}
