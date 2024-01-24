@@ -71,7 +71,7 @@ export class AuthController {
   @UseGuards(GoogleOauthGuard)
   async googleAuth() {}
 
-  @Post('google/callback')
+  @Get('google/callback')
   @UseGuards(GoogleOauthGuard)
   async googleAuthCallback(
     @Req() req,
