@@ -20,7 +20,7 @@ export class EmailService {
       context: {
         id,
         name,
-        link
+        link,
       },
     });
   }

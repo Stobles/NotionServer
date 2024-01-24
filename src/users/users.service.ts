@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { DbService } from 'src/db/db.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { v4 as uuid } from 'uuid';
 import { PatchUserDto } from './dto';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
@@ -42,7 +41,9 @@ export class UsersService {
         salt,
       },
     });
-    const link = `${this.configService.get('serverUrl')}/auth/verify/${user.id}`
+    const link = `${this.configService.get('serverUrl')}/auth/verify/${
+      user.id
+    }`;
     this.eventEmmiter.emit('user.verify-email', {
       id: user.id,
       name: username,

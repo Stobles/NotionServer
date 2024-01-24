@@ -7,7 +7,6 @@ import { UsersModule } from 'src/users/users.module';
 import { GoogleOauthStrategy, RtStrategy } from './strategies';
 import { JwtModule } from '@nestjs/jwt';
 import { CookieService } from './cookie.service';
-import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [

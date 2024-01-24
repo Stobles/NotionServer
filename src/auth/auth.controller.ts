@@ -35,10 +35,7 @@ export class AuthController {
   @Public()
   @Post('local/signup')
   @ApiCreatedResponse()
-  async signUpLocal(
-    @Body() body: SignUpLocalBodyDto,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async signUpLocal(@Body() body: SignUpLocalBodyDto) {
     await this.authService.signUpLocal(body.email, body.password);
   }
 
