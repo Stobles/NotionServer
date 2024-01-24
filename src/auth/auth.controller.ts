@@ -71,7 +71,7 @@ export class AuthController {
   @UseGuards(GoogleOauthGuard)
   async googleAuth() {}
 
-  @Get('google/callback')
+  @Post('google/callback')
   @UseGuards(GoogleOauthGuard)
   async googleAuthCallback(
     @Req() req,
@@ -81,11 +81,6 @@ export class AuthController {
       req.user,
     );
     this.cookieService.setTokens(res, access_token, refresh_token);
-    res.redirect(
-      `${this.configService.get('clientUrl')}/google-oauth-success-redirect/${
-        req.params.from
-      }`,
-    );
   }
 
   @Post('logout')
