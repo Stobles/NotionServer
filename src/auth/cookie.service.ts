@@ -11,7 +11,7 @@ export class CookieService {
   setTokens(res: Response, accessToken: string, refreshToken: string) {
     const accessCookie = `${
       CookieService.accessTokenKey
-    }=${accessToken}; HttpOnly; Path=/; Max-Age=${this.configService.get(
+    }=${accessToken}; HttpOnly; Domain=stoble.ru; Path=/; Max-Age=${this.configService.get(
       'jwt.accessExpiration',
     )}`;
     const refreshCookie = `${
