@@ -81,6 +81,11 @@ export class AuthController {
       req.user,
     );
     this.cookieService.setTokens(res, access_token, refresh_token);
+    res.redirect(
+      `${this.configService.get('clientUrl')}/google-oauth-success-redirect/${
+        req.params.from
+      }`,
+    );
   }
 
   @Post('logout')
