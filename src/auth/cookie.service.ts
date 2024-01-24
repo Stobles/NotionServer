@@ -19,8 +19,7 @@ export class CookieService {
     }=${refreshToken}; HttpOnly; Domain=stoble.ru; Path=/; Max-Age=${this.configService.get(
       'jwt.refreshExpiration',
     )}`;
-    res.setHeader('Set-Cookie', accessCookie);
-    res.setHeader('Set-Cookie', refreshCookie);
+    res.setHeader('Set-Cookie', [accessCookie, refreshCookie]);
   }
 
   removeTokens(res: Response) {
