@@ -11,14 +11,14 @@ export class CookieService {
   setTokens(res: Response, accessToken: string, refreshToken: string) {
     const accessCookie = `${
       CookieService.accessTokenKey
-    }=${accessToken}; HttpOnly; Domain=stoble.ru; Path=/; Max-Age=${this.configService.get(
-      'jwt.accessExpiration',
-    )}`;
+    }=${accessToken}; HttpOnly; Domain=${this.configService.get(
+      'domain',
+    )}; Path=/; Max-Age=${this.configService.get('jwt.accessExpiration')}`;
     const refreshCookie = `${
       CookieService.refreshTokenKey
-    }=${refreshToken}; HttpOnly; Domain=stoble.ru; Path=/; Max-Age=${this.configService.get(
-      'jwt.refreshExpiration',
-    )}`;
+    }=${refreshToken}; HttpOnly; Domain=${this.configService.get(
+      'domain',
+    )}; Path=/; Max-Age=${this.configService.get('jwt.refreshExpiration')}`;
     res.setHeader('Set-Cookie', [accessCookie, refreshCookie]);
   }
 
