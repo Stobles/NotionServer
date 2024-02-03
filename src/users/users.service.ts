@@ -32,7 +32,7 @@ export class UsersService {
   }
 
   async create(email: string, hash?: string, salt?: string) {
-    const username = email.split('@')[0];
+    const username = email.split('@')[0].charAt(0).toUpperCase();
     const user = await this.db.user.create({
       data: {
         username,
