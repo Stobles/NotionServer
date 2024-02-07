@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOkResponse, ApiParam } from '@nestjs/swagger';
 import { SignInLocalBodyDto, SignUpLocalBodyDto } from './dto';
 import { AtGuard } from '../common/guards/at.guard';
 import { GoogleOauthGuard, RtGuard } from 'src/common/guards';
@@ -68,6 +68,11 @@ export class AuthController {
   }
 
   @Get('google-logins/:from')
+  @ApiParam({
+    name: 'from',
+    required: true,
+    description: 'declare where to redirect user after success login',
+  })
   @UseGuards(GoogleOauthGuard)
   async googleAuth() {}
 

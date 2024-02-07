@@ -5,5 +5,5 @@ export class CreateDocumentDto {
   title: string;
 
   @ApiProperty()
-  parentId: string | undefined;
+  parentId?: string | null;
 }

@@ -1,7 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { DbService } from 'src/db/db.service';
-import { Document } from '@prisma/client';
+import { DocumentDto } from './dto/document.dto';
+import { SearchParams } from './dto/search-document.dto';
 
 @Injectable()
 export class DocumentsService {
@@ -9,7 +10,7 @@ export class DocumentsService {
   async create(
     userId: string,
     createDocumentDto: CreateDocumentDto,
-  ): Promise<Document> {
+  ): Promise<DocumentDto> {
     try {
       return await this.db.document.create({
         data: {
@@ -21,5 +22,20 @@ export class DocumentsService {
     } catch (e) {
       throw new BadRequestException(e);
     }
+  }
+  async getAll(userId: string): Promise<DocumentDto[]> {
+    return await this.db.document.findMany({
+      where: { userId },
+    });
+  }
+
+  async getByTitle(
+    userId: string,
+    { title, limit }: SearchParams,
+  ): Promise<DocumentDto[]> {
+    return await this.db.document.findMany({
+      where: { userId, title: { contains: title } },
+      take: limit,
+    });
   }
 }
