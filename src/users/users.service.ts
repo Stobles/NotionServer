@@ -32,8 +32,9 @@ export class UsersService {
   }
 
   async create(email: string, hash?: string, salt?: string) {
-    const username = email.split('@')[0];
-    username.charAt(0).toUpperCase();
+    let username = email.split('@')[0];
+    username = username.charAt(0).toUpperCase() + username.slice(1);
+    console.log(username);
     const user = await this.db.user.create({
       data: {
         username,
@@ -50,6 +51,11 @@ export class UsersService {
       name: username,
       email,
       link,
+    });
+
+    this.eventEmmiter.emit('documents.create', {
+      userId: user.id,
+      title: 'Untitled',
     });
 
     return user;
