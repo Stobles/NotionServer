@@ -24,7 +24,8 @@ model User {
 
   isProvider Boolean    @default(false)
   isVerified Boolean    @default(false)
-  Document   Document[]
+  Document   Document[] @relation("Owner")
+  Favorites  Favorite[]
 }
 
 model Document {
@@ -43,10 +44,22 @@ model Document {
   isArchived  Boolean @default(false)
 
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  favoritedBy Favorite[]
 
   userId String
-  user   User?  @relation(fields: [userId], references: [id])
+  user   User?  @relation("Owner", fields: [userId], references: [id])
 
   @@index(fields: [userId], map: "by_user")
   @@index(fields: [userId, parentId], map: "by_user_parent")
+}
+
+model Favorite {
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  documentId String
+
+  @@id([userId, documentId])
 }
