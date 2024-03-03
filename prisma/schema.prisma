@@ -37,7 +37,7 @@ model Document {
   icon       String?
 
   parentId  String?
-  parent    Document?  @relation("ParentDocument", fields: [parentId], references: [id])
+  parent    Document?  @relation("ParentDocument", fields: [parentId], references: [id], onDelete: Cascade)
   childrens Document[] @relation("ParentDocument")
 
   isPublished Boolean @default(false)
@@ -56,9 +56,9 @@ model Document {
 }
 
 model Favorite {
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user       User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
-  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  document   Document? @relation(fields: [documentId], references: [id], onDelete: Cascade)
   documentId String
 
   @@id([userId, documentId])
