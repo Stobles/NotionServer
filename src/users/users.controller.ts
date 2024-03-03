@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Patch, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { PatchUserDto } from './dto';
+import { PatchUserDto } from './dto/patch-user.dto';
 import { AtGuard } from 'src/common/guards';
 import { SessionInfo } from 'src/common/decorators/sessionInfo.decorator';
 import { GetSessionInfoDto } from 'src/common/decorators/dto';
