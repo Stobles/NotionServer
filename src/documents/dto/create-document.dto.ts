@@ -2,13 +2,17 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional } from 'class-validator';
 
 export class CreateDocumentDto {
-  @ApiProperty()
-  userId: string;
+  @ApiProperty({
+    required: false,
+  })
+  userId?: string;
 
   @ApiProperty()
   title: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    required: false,
+  })
   @IsOptional()
-  parentId?: string | null;
+  parentId?: string;
 }

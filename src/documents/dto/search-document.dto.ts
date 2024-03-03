@@ -1,16 +1,48 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional } from 'class-validator';
 
-export class SearchByTitleParams {
-  @ApiProperty()
-  title: string;
+class SortType {
+  @ApiProperty({
+    required: false,
+    default: 'title',
+  })
+  field?: string;
 
-  @ApiProperty()
-  @IsOptional()
-  limit: number;
+  @ApiProperty({
+    required: false,
+    default: 'asc',
+  })
+  type?: 'asc' | 'desc';
 }
 
-export class SearchByParentParams {
-  @ApiProperty()
-  parentId: string;
+class FilterType {
+  @ApiProperty({
+    required: false,
+    default: false,
+  })
+  isArchived?: boolean;
+}
+
+export class SearchParams {
+  @ApiProperty({
+    type: FilterType,
+    required: false,
+  })
+  filters?: FilterType;
+
+  @ApiProperty({
+    default: '',
+  })
+  query: string;
+
+  @ApiProperty({
+    required: false,
+    default: 10,
+  })
+  limit?: number;
+
+  @ApiProperty({
+    type: SortType,
+    required: false,
+  })
+  sort?: SortType;
 }
