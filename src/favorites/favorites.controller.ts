@@ -13,7 +13,7 @@ export class FavoritesController {
     type: FavoriteDto,
     isArray: true,
   })
-  async getAll(@Param('id') userId: string): Promise<FavoriteDto[]> {
+  getAll(@Param('id') userId: string): Promise<FavoriteDto[]> {
     return this.favoritesService.getAll(userId);
   }
 
@@ -21,7 +21,7 @@ export class FavoritesController {
   @ApiOkResponse({
     type: FavoriteDto,
   })
-  async toggleFavorite(@Body() body: CreateFavoriteDto): Promise<FavoriteDto> {
+  toggleFavorite(@Body() body: CreateFavoriteDto): Promise<FavoriteDto> {
     return this.favoritesService.toggleFavorite(body);
   }
 }
