@@ -8,6 +8,8 @@ import * as Joi from '@hapi/joi';
 import { config } from './common/config';
 import { EmailModule } from './email/email.module';
 import { DocumentsModule } from './documents/documents.module';
+import { FavoritesService } from './favorites/favorites.service';
+import { FavoritesModule } from './favorites/favorites.module';
 
 @Module({
   imports: [
@@ -37,6 +39,8 @@ import { DocumentsModule } from './documents/documents.module';
     AuthModule,
     EmailModule,
     DocumentsModule,
+    FavoritesModule,
   ],
+  providers: [FavoritesService],
 })
 export class AppModule {}
