@@ -1,4 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+import { CanBeUndefined } from 'src/common/utils/canBeUndefined';
 
 export class DocumentDto {
   @ApiProperty({
@@ -9,40 +11,71 @@ export class DocumentDto {
   @ApiProperty({
     example: 'Document title',
   })
-  title: string;
+  @IsString()
+  @IsNotEmpty()
+  @CanBeUndefined()
+  title?: string;
 
   @ApiProperty({
     example: 'some_content',
   })
-  content: string;
+  @CanBeUndefined()
+  content?: string;
 
   @ApiProperty({
     example: 'link_to_image',
   })
-  coverImage: string;
+  @IsString()
+  @CanBeUndefined()
+  coverImage?: string;
+
   @ApiProperty({
     example: 'link_to_icon',
   })
-  icon: string;
+  @IsString()
+  @CanBeUndefined()
+  icon?: string;
 
   @ApiProperty({
     example: '1',
   })
-  parentId: string;
+  @IsString()
+  @CanBeUndefined()
+  parentId?: string;
 
   @ApiProperty({
     example: false,
   })
-  isPublished: boolean;
+  @IsBoolean()
+  @CanBeUndefined()
+  isPublished?: boolean;
+
+  @ApiProperty({
+    isArray: true,
+    type: DocumentDto,
+  })
+  @IsString()
+  @CanBeUndefined()
+  childrens?: DocumentDto[];
+
   @ApiProperty({
     example: false,
   })
-  isArchived: boolean;
+  @IsBoolean()
+  @CanBeUndefined()
+  isArchived?: boolean;
 
   @ApiProperty({
-    example: '2014-02-05',
+    example: '2024-02-05',
+    type: Date,
   })
   createdAt: Date;
+
+  @ApiProperty({
+    example: '2024-05-05',
+    type: Date,
+  })
+  updatedAt?: Date;
 
   @ApiProperty({
     example: '1',
