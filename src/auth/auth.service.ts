@@ -32,7 +32,7 @@ export class AuthService {
     const salt = this.passwordService.getSalt();
     const hash = this.passwordService.getHash(password, salt);
 
-    const newUser = await this.usersService.create(email, hash, salt);
+    const newUser = await this.usersService.create({ email, hash, salt });
 
     const tokens = await this.getTokens(
       newUser.id,
