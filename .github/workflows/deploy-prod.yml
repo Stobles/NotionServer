@@ -9,7 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     concurrency:
-      group: staging
+      group: production
       cancel-in-progress: true
     steps:
       - name: SSH Command

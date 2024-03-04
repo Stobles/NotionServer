@@ -12,7 +12,7 @@ import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
         secure: true,
         auth: {
           user: process.env.SMTP_MAIL_USER,
-          pass: 'wThxLcR1f6kC6qcaxrZj',
+          pass: process.env.SMTP_MAIL_PASSWORD,
         },
       },
       defaults: {
