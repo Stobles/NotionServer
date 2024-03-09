@@ -10,6 +10,7 @@ import { SearchParams } from './dto/search-document.dto';
 import { OnEvent } from '@nestjs/event-emitter';
 import { UpdateDocumentDto } from './dto/update-document.dto';
 import DocumentNotFoundException from './exceptions/documentNotFound.exception';
+import { removeSpacesAndSpecialChars } from 'src/common/utils/removeSpacesAndSpecialChars';
 
 @Injectable()
 export class DocumentsService {
@@ -49,11 +50,11 @@ export class DocumentsService {
   }
 
   async deleteDocument(userId: string, id: string): Promise<DocumentDto> {
-    const documents = await this.db.document.findMany({
+    const documentsCount = await this.db.document.count({
       where: { userId },
     });
 
-    if (documents.length === 1) {
+    if (documentsCount === 1) {
       throw new BadRequestException('Вы не можете удалить последний документ.');
     }
     try {
@@ -74,6 +75,69 @@ export class DocumentsService {
         favoritedBy: true,
         childrens: true,
       },
+    });
+  }
+
+  async archive(userId: string, documentId: string): Promise<DocumentDto> {
+    const document = await this.db.document.findFirst({
+      where: { userId, id: documentId },
+    });
+
+    if (!document) throw new NotFoundException();
+
+    const documentsCount = await this.db.document.count({
+      where: { userId, isArchived: false },
+    });
+
+    if (documentsCount === 1) {
+      throw new BadRequestException('Вы не можете удалить последний документ.');
+    }
+
+    await this.db.document.update({
+      where: { userId, id: documentId },
+      data: { isArchived: true },
+    });
+
+    await this.db.document.updateMany({
+      where: { parentId: documentId },
+      data: { isArchived: true },
+    });
+
+    return document;
+  }
+
+  async restore(userId: string, documentId: string): Promise<DocumentDto> {
+    const document = await this.db.document.findFirst({
+      where: { userId, id: documentId },
+      include: { parent: true },
+    });
+
+    if (!document) throw new NotFoundException();
+
+    await this.db.document.update({
+      where: { userId, id: documentId },
+      data: {
+        isArchived: false,
+        parentId: document?.parent?.isArchived ? null : document.parentId,
+      },
+    });
+
+    await this.db.document.updateMany({
+      where: { parentId: documentId },
+      data: { isArchived: false },
+    });
+
+    return document;
+  }
+
+  async addCover(userId: string, documentId: string, fileName: string) {
+    const fileNameChanged = removeSpacesAndSpecialChars(fileName);
+    return await this.db.document.update({
+      where: {
+        userId,
+        id: documentId,
+      },
+      data: { coverImage: fileNameChanged },
     });
   }
 
@@ -121,6 +185,7 @@ export class DocumentsService {
     {
       filters = { isArchived: false },
       sort = { field: 'title', type: 'asc' },
+      parent = false,
       query = '',
       limit = 10,
     }: SearchParams,
@@ -132,48 +197,8 @@ export class DocumentsService {
         ...filters,
       },
       take: limit,
-      include: { favoritedBy: true },
+      include: { favoritedBy: true, parent },
       orderBy: { [sort.field]: sort.type },
     });
-  }
-
-  async archive(userId: string, documentId: string): Promise<DocumentDto> {
-    const document = await this.db.document.findFirst({
-      where: { userId, id: documentId },
-    });
-
-    if (!document) throw new NotFoundException();
-
-    await this.db.document.update({
-      where: { userId, id: documentId },
-      data: { isArchived: true },
-    });
-
-    await this.db.document.updateMany({
-      where: { parentId: documentId },
-      data: { isArchived: true },
-    });
-
-    return document;
-  }
-
-  async restore(userId: string, documentId: string): Promise<DocumentDto> {
-    const document = await this.db.document.findFirst({
-      where: { userId, id: documentId },
-    });
-
-    if (!document) throw new NotFoundException();
-
-    await this.db.document.update({
-      where: { userId, id: documentId },
-      data: { isArchived: false },
-    });
-
-    await this.db.document.updateMany({
-      where: { parentId: documentId },
-      data: { isArchived: false },
-    });
-
-    return document;
   }
 }

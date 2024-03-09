@@ -23,7 +23,11 @@ export class CookieService {
   }
 
   removeTokens(res: Response) {
-    res.clearCookie(CookieService.accessTokenKey);
-    res.clearCookie(CookieService.refreshTokenKey);
+    res.clearCookie(CookieService.accessTokenKey, {
+      domain: this.configService.get('domain'),
+    });
+    res.clearCookie(CookieService.refreshTokenKey, {
+      domain: this.configService.get('domain'),
+    });
   }
 }

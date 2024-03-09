@@ -13,10 +13,25 @@ export class FavoritesService {
   constructor(private db: DbService) {}
 
   async getAll(userId: string) {
-    return await this.db.favorite.findMany({
+    const favorites = await this.db.favorite.findMany({
       where: { userId },
       include: { document: true },
     });
+
+    const favoriteDocuments = favorites.filter((favorite) => {
+      if (!favorite?.document?.isArchived) return favorite.document;
+    });
+
+    return favoriteDocuments;
+  }
+
+  async getById(userId: string, documentId: string) {
+    const favorite = await this.db.favorite.findMany({
+      where: { userId, documentId },
+      include: { document: true },
+    });
+
+    return favorite;
   }
 
   async toggleFavorite({

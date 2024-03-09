@@ -41,6 +41,12 @@ export class SearchParams {
   limit?: number;
 
   @ApiProperty({
+    required: false,
+    default: false,
+  })
+  parent?: boolean;
+
+  @ApiProperty({
     type: SortType,
     required: false,
   })

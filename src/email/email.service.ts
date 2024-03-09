@@ -12,16 +12,19 @@ export class EmailService {
     const { id, name, email, link } = data;
 
     const subject = `Company: OTP To Verify Email`;
-
-    await this.mailerService.sendMail({
-      to: email,
-      subject,
-      template: './verify-email',
-      context: {
-        id,
-        name,
-        link,
-      },
-    });
+    try {
+      await this.mailerService.sendMail({
+        to: email,
+        subject,
+        template: './verify-email',
+        context: {
+          id,
+          name,
+          link,
+        },
+      });
+    } catch (e) {
+      console.log(e);
+    }
   }
 }

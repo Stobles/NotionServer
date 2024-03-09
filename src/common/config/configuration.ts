@@ -3,6 +3,7 @@ export const config = () => ({
   clientUrl: process.env.CLIENT_URL_BASE,
   serverUrl: process.env.SERVER_URL_BASE,
   domain: process.env.HOST_COOKIE,
+  uploadedFilesDest: process.env.UPLOADED_FILES_DESTINATION,
   jwt: {
     accessSecret: process.env.JWT_ACCESS_SECRET,
     accessExpiration: process.env.JWT_ACCESS_EXPIRATION,
