@@ -91,17 +91,18 @@ export class AuthService {
       user.avatar,
     );
 
+    console.log(newUser);
+
     const tokens = await this.getTokens(
       newUser.id,
       newUser.email,
       newUser.username,
       newUser.avatar,
     );
+
+    console.log(tokens);
     await this.updateRtHash(newUser.id, tokens.refresh_token);
-    return {
-      access_token: tokens.access_token,
-      refresh_token: tokens.refresh_token,
-    };
+    return newUser;
   }
 
   async signInGoogle(user: GoogleUser) {
@@ -109,16 +110,14 @@ export class AuthService {
 
     const userExist = await this.usersService.findByEmail(user.email);
 
-    if (!userExist) {
-      return this.signUpGoogle(user);
-    }
-
     const tokens = await this.getTokens(
       userExist.id,
       userExist.email,
       userExist.username,
       userExist.avatar,
     );
+
+    console.log('Sign in - ', tokens);
     await this.updateRtHash(userExist.id, tokens.refresh_token);
     return {
       access_token: tokens.access_token,

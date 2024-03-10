@@ -82,6 +82,7 @@ export class AuthController {
     @Req() req,
     @Res({ passthrough: true }) res: Response,
   ) {
+    console.log('Callback -', req.user);
     const { access_token, refresh_token } = await this.authService.signInGoogle(
       req.user,
     );
