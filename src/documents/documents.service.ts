@@ -98,10 +98,11 @@ export class DocumentsService {
       data: { isArchived: true },
     });
 
-    await this.db.document.updateMany({
+    const childrens = await this.db.document.findMany({
       where: { parentId: documentId },
-      data: { isArchived: true },
     });
+
+    childrens.forEach((child) => this.archive(userId, child.id));
 
     return document;
   }
@@ -122,10 +123,11 @@ export class DocumentsService {
       },
     });
 
-    await this.db.document.updateMany({
+    const childrens = await this.db.document.findMany({
       where: { parentId: documentId },
-      data: { isArchived: false },
     });
+
+    childrens.forEach((child) => this.restore(userId, child.id));
 
     return document;
   }

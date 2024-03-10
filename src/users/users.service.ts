@@ -50,8 +50,14 @@ export class UsersService {
         hash: '',
         salt: '',
         isProvider: true,
+        isVerified: true,
         avatar,
       },
+    });
+
+    this.eventEmmiter.emit('documents.create', {
+      userId: user.id,
+      title: 'Untitled',
     });
 
     return user;
